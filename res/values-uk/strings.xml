@@ -37,14 +37,14 @@
     <string name="category_timeouts">Затримка</string>
     <string name="timeout_plugged_title">Під час зарядки</string>
     <string name="timeout_unplugged_title">Від\'єднано</string>
-    <string name="timeout_summary">Показувати додаток чохла для %s після закриття</string>
+    <string name="timeout_summary">Показувати додаток чохла %s після закриття</string>
     <string name="timeout_summary_never">Після закриття чохла, програму буде увімкнено</string>
     <string name="timeout_summary_immediately">Під час закриття чохла екран буде вимкнено</string>
     <string name="timeout_entry_immediately">Негайно</string>
     <string name="timeout_entry_5s">5 секунд</string>
     <string name="timeout_entry_10s">10 секунд</string>
     <string name="timeout_entry_30s">30 секунд</string>
-    <string name="timeout_entry_1min">1 хвилина</string>
+    <string name="timeout_entry_1min">1 хвилину</string>
     <string name="timeout_entry_5min">5 хвилин</string>
     <string name="timeout_entry_never">Ніколи</string>
     <string name="switch_bar_on">Увімкнено</string>
