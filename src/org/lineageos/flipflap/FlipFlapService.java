@@ -22,14 +22,17 @@ package org.lineageos.flipflap;
 
 import android.app.Notification;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.WindowManagerPolicy.WindowManagerFuncs;
 
 public class FlipFlapService extends Service {
     private static final String TAG = "FlipFlap";
@@ -37,6 +40,7 @@ public class FlipFlapService extends Service {
     private Context mContext;
     private FlipFlapView mCoverView;
     private WindowManager mWm;
+    private int mStartId;
 
     @Override
     public void onCreate() {
@@ -56,7 +60,21 @@ public class FlipFlapService extends Service {
                 .setLocalOnly(true)
                 .build();
         startForeground(1, notification);
+
+        registerReceiver(mReceiver, new IntentFilter(com.android.internal.util.mdroid.content.Intent.ACTION_LID_STATE_CHANGED));
     }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (com.android.internal.util.mdroid.content.Intent.ACTION_LID_STATE_CHANGED.equals(intent.getAction())) {
+                int lidState = intent.getIntExtra(com.android.internal.util.mdroid.content.Intent.EXTRA_LID_STATE, -1);
+                if (lidState == WindowManagerFuncs.LID_OPEN) {
+                    stopSelf(mStartId);
+                }
+            }
+        }
+    };
 
     @Override
     public void onDestroy() {
@@ -67,14 +85,16 @@ public class FlipFlapService extends Service {
             mWm.removeView(mCoverView);
             mCoverView = null;
         }
+        unregisterReceiver(mReceiver);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        mStartId = startId;
         if (mCoverView == null) {
             mCoverView = createCoverView();
             if (mCoverView == null) {
-                stopSelf(startId);
+                stopSelf(mStartId);
             } else {
                 WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.TYPE_BOOT_PROGRESS);

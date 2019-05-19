@@ -54,8 +54,6 @@ public class EventReceiver extends BroadcastReceiver {
                 } else if (powerManager.isInteractive()) {
                     powerManager.goToSleep(SystemClock.uptimeMillis());
                 }
-            } else {
-                context.stopServiceAsUser(serviceIntent, UserHandle.CURRENT);
             }
         }
     }
